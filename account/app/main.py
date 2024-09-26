@@ -8,12 +8,14 @@ path = Path(__file__).parent.parent.parent
 sys.path.insert(0, str(path))
 
 from account.app.users.api import router as users_router
+from account.app.users.doctors.api import router as doctors_router
 from account.app.auth.api import router as auth_router
 
 
 app = FastAPI()
 app.include_router(users_router)
 app.include_router(auth_router)
+app.include_router(doctors_router)
 
 
 if __name__ == '__main__':
