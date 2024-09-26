@@ -1,1 +1,3 @@
-*/.env
+*.env
+*.sql
+__pycache__
