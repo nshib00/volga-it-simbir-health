@@ -41,3 +41,7 @@ class ForbiddenException(BaseAppException):
 class InvalidTokenForRefreshException(BaseAppException):
     status_code = status.HTTP_400_BAD_REQUEST
     detail = 'Передан неверный токен для обновления.'
+
+
+class DoctorNotExistsException(UserNotExistsException):
+    detail = 'Доктор с переданными данными не существует.'

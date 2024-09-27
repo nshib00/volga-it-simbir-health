@@ -6,7 +6,7 @@ class BaseGetService:
     model = None
 
     @classmethod
-    async def __get_result(cls, query):
+    async def _get_result(cls, query):
         async with async_sessionmaker() as session:
             result = await session.execute(query)
         return result
@@ -14,13 +14,13 @@ class BaseGetService:
     @classmethod
     async def find_all(cls, **filters):
         query = select(cls.model).filter_by(**filters)
-        result = await cls.__get_result(query)
+        result = await cls._get_result(query)
         return result.scalars().all()
     
     @classmethod
     async def find_one_or_none(cls, **filters):
         query = select(cls.model).filter_by(**filters)
-        result = await cls.__get_result(query)
+        result = await cls._get_result(query)
         return result.scalars().one_or_none()
 
 

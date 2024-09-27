@@ -6,7 +6,7 @@ import jwt
 from account.app.auth.tokens.info import ACCESS_TOKEN_TYPE, REFRESH_TOKEN_TYPE, TokenInfo
 from account.app.auth.tokens.service import RefreshTokenService
 from account.app.config import settings
-from account.app.exceptions import InvalidTokenTypeException
+from account.app.exceptions import InvalidTokenTypeException, NoTokenException, TokenExpiredException, UserNotExistsException
 from account.app.users.models import User
 from account.app.users.service import UserService
 from account.app.auth.hash_password import HashPassword
@@ -68,6 +68,20 @@ async def authenticate_user(username: str, password: str) -> User | None:
         return None
     return user
 
+
+def validate_token(token: str) -> None:
+    try:
+        payload = get_data_from_token(token)
+    except jwt.PyJWTError:
+        raise NoTokenException
+    token_expiration: str | None = payload.get('exp')
+    if token_expiration is None or int(token_expiration) < datetime.now(timezone.utc).timestamp():
+        raise TokenExpiredException
+    user_id: str | None = payload.get('sub')
+    if user_id is None:
+        raise UserNotExistsException
+    return payload
+    
 
 def get_data_from_token(token: str) -> dict:
     return jwt.decode(

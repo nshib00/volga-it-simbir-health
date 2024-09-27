@@ -8,7 +8,8 @@ from account.app.auth.logic import (
     clear_refresh_token,
     create_access_and_refresh_tokens,
     get_data_from_token,
-    save_access_token, save_refresh_token
+    save_access_token, save_refresh_token,
+    validate_token
 )
 from account.app.auth.tokens.info import TokenInfo
 from account.app.auth.tokens.service import RefreshTokenService
@@ -55,7 +56,8 @@ async def sign_out_user(response: Response, user: User = Depends(get_current_use
 
 
 @router.get('/Validate')
-async def validate_token(accessToken: str):
+async def get_validated_token(accessToken: str):
+    validate_token(accessToken)
     return get_data_from_token(accessToken)
 
 
