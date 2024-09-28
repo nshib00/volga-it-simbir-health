@@ -31,7 +31,11 @@ def create_token(token_data: dict, token_type: str) -> str:
     return encoded_jwt
 
 
-def create_access_and_refresh_tokens(token_data: dict) -> TokenInfo:
+def create_access_and_refresh_tokens(user_id: int, user_roles: list[str]) -> TokenInfo:
+    token_data = {
+        'sub': user_id,
+        'roles': ','.join(user_roles)
+    }
     return TokenInfo(
         access_token=create_token(token_data, token_type=ACCESS_TOKEN_TYPE),
         refresh_token=create_token(token_data, token_type=REFRESH_TOKEN_TYPE),

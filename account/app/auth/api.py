@@ -42,7 +42,8 @@ async def sign_in_user(response: Response, username: str, password: str):
     if authenticated_user is None:
         raise UserNotExistsException
     tokens = create_access_and_refresh_tokens(
-        token_data={'sub': authenticated_user.id}
+        user_id=authenticated_user.id,
+        user_roles=authenticated_user.roles
     )
     save_access_token(tokens.access_token, response)
     await save_refresh_token(tokens.refresh_token, user_id=authenticated_user.id)
@@ -68,9 +69,7 @@ async def refresh_token(response: Response, refreshToken: str, user: User = Depe
         raise InvalidTokenForRefreshException
     clear_access_token(response)
     await clear_refresh_token(user_id=user.id)
-    tokens = create_access_and_refresh_tokens(
-        token_data={'sub': user.id}
-    )
+    tokens = create_access_and_refresh_tokens(user_id=user.id, user_roles=user.roles)
     save_access_token(tokens.access_token, response)
     await save_refresh_token(tokens.refresh_token, user_id=user.id)
     return tokens
