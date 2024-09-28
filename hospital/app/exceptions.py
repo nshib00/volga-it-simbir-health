@@ -12,3 +12,13 @@ class BaseAppException(HTTPException):
 class HospitalNotFoundException(BaseAppException):
     status_code = status.HTTP_404_NOT_FOUND
     detail = 'Больница не найдена.'
+
+
+class NotAuthenticatedException(BaseAppException):
+    status_code = status.HTTP_401_UNAUTHORIZED
+    detail = 'Необходимо войти в систему.'
+
+
+class ForbiddenException(BaseAppException):
+    status_code = status.HTTP_403_FORBIDDEN
+    detail = 'Нет необходимых прав для доступа.'

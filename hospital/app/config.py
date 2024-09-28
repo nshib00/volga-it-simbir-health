@@ -11,6 +11,8 @@ class HospitalSettings(BaseSettings):
     DB_USER: str
     DB_PASSWORD: str
 
+    BASE_AUTH_URL: str
+
     @property
     def DB_URL(self):
         return f'postgresql+asyncpg://{self.DB_USER}:{self.DB_PASSWORD}@{self.DB_HOST}:{self.DB_PORT}/{self.DB_NAME}'
