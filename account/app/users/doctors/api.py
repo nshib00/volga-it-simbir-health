@@ -14,8 +14,13 @@ router = APIRouter(
 
 
 @router.get('')
-async def get_all_doctors(user: User = Depends(get_current_user)) -> list[ShowUserSchema]:
-    return await DoctorService.find_all_doctors()
+async def get_all_doctors(
+    nameFilter: str | None = None,
+    from_: int | None = None,
+    count: int | None = None,
+    user: User = Depends(get_current_user)
+) -> list[ShowUserSchema]:
+    return await DoctorService.find_all_doctors(offset=from_, limit=count, filter_by=nameFilter)
 
 
 @router.get('/{doctor_id}')

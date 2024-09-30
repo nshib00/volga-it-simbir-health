@@ -1,4 +1,5 @@
 from sqlalchemy import JSON, Column, Integer, String
+from sqlalchemy.orm import column_property
 
 from account.app.database import Base
 
@@ -12,6 +13,8 @@ class User(Base):
     username = Column(String(30), nullable=False)
     hashed_password = Column(String, nullable=False)
     roles = Column(JSON, default=[])
+
+    fullName = column_property(firstName + ' ' + lastName)
 
 
 

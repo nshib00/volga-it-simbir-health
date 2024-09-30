@@ -7,13 +7,29 @@ class DoctorService(UserService):
     model = User
 
     @classmethod
-    def __get_doctors_query(cls):
-        return select(cls.model).filter(User.roles[0].cast(String).icontains('doctor'))
+    def __get_doctors_query(cls, query_filter: str | None = None):
+        if query_filter is not None:
+            return select(cls.model).filter(
+                User.roles[0].cast(String).icontains('doctor'),
+                User.fullName.like(query_filter)
+            )
+        return select(cls.model).filter(
+                User.roles[0].cast(String).icontains('doctor')
+        )
 
 
     @classmethod
-    async def find_all_doctors(cls):
-        query = cls.__get_doctors_query()
+    async def find_all_doctors(
+        cls, 
+        limit: int | None = None,
+        offset: int | None = None,
+        filter_by: str | None = None
+    ):
+        query = cls.__get_doctors_query(query_filter=filter_by)
+        if limit is not None:
+            query = query.limit(limit)
+        if offset is not None:
+            query = query.offset(offset)    
         result = await cls._get_result(query)
         return result.scalars().all()
     
