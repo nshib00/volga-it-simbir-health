@@ -15,9 +15,9 @@ async def get_validated_token(request: Request) -> dict | None:
     
 
 async def check_token(token_data: dict = Depends(get_validated_token)) -> None:
-    if token_data.get('detail') == 'Токен отсутствует.':
+    if token_data is None:
         raise NotAuthenticatedException
-
+        
 
 async def check_admin_token(token_data: dict = Depends(get_validated_token), _ = Depends(check_token)) -> None:
     if token_data.get('roles') is None or 'Admin' not in token_data.get('roles'):
