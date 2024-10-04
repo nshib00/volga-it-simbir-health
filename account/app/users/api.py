@@ -2,7 +2,6 @@ from fastapi import APIRouter, Depends, status
 
 from account.app.auth.dependencies import get_current_admin, get_current_user
 from account.app.auth.hash_password import HashPassword
-from account.app.exceptions import ForbiddenException
 from account.app.users.models import User
 from account.app.users.schemas import ShowUserSchema
 from account.app.users.service import UserService
@@ -29,7 +28,6 @@ async def update_account_me(
         lastName=lastName,
         hashed_password=HashPassword.get_password_hash(password),
     )
-    print(updated_current_user)
     return updated_current_user
 
 

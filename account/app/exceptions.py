@@ -13,6 +13,10 @@ class BaseUnauthorizedException(BaseAppException):
     status_code = status.HTTP_401_UNAUTHORIZED
 
 
+class BaseNotFoundException(BaseAppException):
+    status_code = status.HTTP_404_NOT_FOUND
+
+
 class InvalidTokenTypeException(BaseUnauthorizedException):
     detail = 'Указан несуществующий тип токена.'
 
@@ -29,7 +33,7 @@ class TokenExpiredException(BaseUnauthorizedException):
     detail = 'Срок действия токена истек.'
 
 
-class UserNotExistsException(BaseUnauthorizedException):
+class UserNotExistsException(BaseNotFoundException):
     detail = 'Пользователь с переданными данными не существует.'
 
 
@@ -45,3 +49,10 @@ class InvalidTokenForRefreshException(BaseAppException):
 
 class DoctorNotExistsException(UserNotExistsException):
     detail = 'Доктор с переданными данными не существует.'
+
+
+class GeneralAPIException(BaseAppException):
+    def __init__(self, status_code: int, context: str):
+        self.status_code = status_code
+        self.detail = context
+
