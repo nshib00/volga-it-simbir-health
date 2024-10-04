@@ -7,10 +7,13 @@ class BaseAppException(HTTPException):
 
     def __init__(self):
         super().__init__(status_code=self.status_code, detail=self.detail)
+
+
+class BaseNotFoundException(BaseAppException):
+    status_code = status.HTTP_404_NOT_FOUND
     
 
-class HospitalNotFoundException(BaseAppException):
-    status_code = status.HTTP_404_NOT_FOUND
+class HospitalNotFoundException(BaseNotFoundException):
     detail = 'Больница не найдена.'
 
 
