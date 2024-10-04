@@ -1,5 +1,5 @@
 from sqlalchemy import delete, insert, select, update
-from account.app.database import async_sessionmaker
+from hospital.app.database import async_sessionmaker
 
 
 class BaseGetService:
