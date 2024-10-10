@@ -24,6 +24,6 @@ async def get_current_user(token: str = Depends(get_token)) -> User:
 
 
 def get_current_admin(user: User = Depends(get_current_user)) -> User:
-    if 'admin' not in user.roles:
+    if 'Admin' not in user.roles:
         raise ForbiddenException
     return user
