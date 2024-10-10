@@ -27,7 +27,7 @@ async def get_hospital_by_id(hospital_id: int, _ = Depends(check_token)) -> Hosp
     return hospital
 
 
-@router.get('/{hospital_id}/rooms')
+@router.get('/{hospital_id}/Rooms')
 async def get_hospital_rooms(hospital_id: int, _ = Depends(check_token)) -> list[dict | str]:
     hospital_rooms = await HospitalService.get_hospital_rooms(hospital_id)
     if hospital_rooms is None:
