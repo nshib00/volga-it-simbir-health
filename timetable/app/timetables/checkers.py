@@ -1,7 +1,7 @@
 from datetime import datetime, timedelta
 import httpx
 
-from timetable.app.exceptions import APIExceptionWithContext
+from account.app.exceptions import GeneralAPIException
 from timetable.app.exceptions import DoctorNotFoundException, HospitalNotFoundException, TimetableDateToSmallerDateFromException, TimetableInvalidFromDatetimeException, TimetableInvalidToDatetimeException, TooBigDateIntervalException
 from timetable.app.config import settings
 
@@ -43,7 +43,7 @@ async def check_if_doctor_exists(doctor_id: int, cookies: dict[str, str]) -> Non
     if doctor_response.status_code == 404:
         raise DoctorNotFoundException
     elif not doctor_response.is_success:
-        raise APIExceptionWithContext(
+        raise GeneralAPIException(
             status_code=doctor_response.status_code,
             context={
                 'url': url,
@@ -58,7 +58,7 @@ async def check_if_hospital_exists(hospital_id: int, cookies: dict[str, str]) ->
     if hospital_response.status_code == 404:
         raise HospitalNotFoundException
     elif not hospital_response.is_success:
-        raise APIExceptionWithContext(
+        raise GeneralAPIException(
             status_code=hospital_response.status_code,
             context={
                 'url': url,

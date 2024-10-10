@@ -50,3 +50,9 @@ class InvalidTokenForRefreshException(BaseAppException):
 class DoctorNotExistsException(UserNotExistsException):
     detail = 'Доктор с переданными данными не существует.'
 
+
+class GeneralAPIException(BaseAppException):
+    def __init__(self, status_code: int, context: str):
+        self.status_code = status_code
+        self.detail = context
+
