@@ -29,7 +29,6 @@ class TokenRolesChecker:
     def __call__(self, token_data: dict = Depends(get_validated_token),  _ = Depends(check_token)):
         if token_data.get('roles') is None:
             raise ForbiddenException
-        print(any(role in token_data.get('roles') for role in self.roles))
         if not any(role in token_data.get('roles') for role in self.roles):
             raise ForbiddenException
         return self.roles
