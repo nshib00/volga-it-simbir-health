@@ -3,7 +3,7 @@ from fastapi import APIRouter, Depends, status
 from account.app.auth.dependencies import get_current_admin, get_current_user
 from account.app.auth.hash_password import HashPassword
 from account.app.users.models import User
-from account.app.users.schemas import ShowUserSchema
+from account.app.users.schemas import ShowUserSchema, UserRoles
 from account.app.users.service import UserService
 
 
@@ -43,9 +43,9 @@ async def update_account(
     last_name: str,
     username: str,
     password: str,
-    roles: list[str],
+    roles: list[UserRoles],
     user: User = Depends(get_current_admin)
-) -> ShowUserSchema:
+) -> None:
     hashed_password = HashPassword.get_password_hash(password)
     if HashPassword.verify(password, hashed_password):
         await UserService.update_one(
