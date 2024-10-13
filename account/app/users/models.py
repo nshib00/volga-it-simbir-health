@@ -12,7 +12,7 @@ class User(Base):
     lastName = Column(String(50), nullable=False)
     username = Column(String(30), nullable=False)
     hashed_password = Column(String, nullable=False)
-    roles = Column(JSON, default=[])
+    roles = Column(JSON, default=['User'])
 
     fullName = column_property(firstName + ' ' + lastName)
 
