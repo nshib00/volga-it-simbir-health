@@ -27,3 +27,22 @@ def get_current_admin(user: User = Depends(get_current_user)) -> User:
     if 'Admin' not in user.roles:
         raise ForbiddenException
     return user
+
+
+class TokenRolesChecker:
+    def __init__(self, roles: list[str] | None = None):
+        if not roles:
+            self.roles = ['User'] # роль, присваиваемая пользователю по умолчанию
+        else:
+            self.roles = roles
+
+    def __call__(self, token: str = Depends(get_token)):
+        token_data = get_data_from_token(token)
+        if token_data.get('roles') is None:
+            raise ForbiddenException
+        if not any(role in token_data.get('roles') for role in self.roles):
+            raise ForbiddenException
+        return self.roles
+    
+
+check_admin_manager_or_doctor = TokenRolesChecker(['Admin', 'Manager', 'Doctor'])

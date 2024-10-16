@@ -37,6 +37,10 @@ class UserNotExistsException(BaseNotFoundException):
     detail = 'Пользователь с переданными данными не существует.'
 
 
+class PacientNotExistsException(BaseNotFoundException):
+    detail = 'Пользователь с переданными данными либо не существует, либо не является пациентом.'
+
+
 class ForbiddenException(BaseAppException):
     status_code = status.HTTP_403_FORBIDDEN
     detail = 'Нет необходимых прав для доступа.'

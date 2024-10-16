@@ -1,7 +1,9 @@
 from fastapi import APIRouter, Depends, status
+from sqlalchemy import String
 
-from account.app.auth.dependencies import get_current_admin, get_current_user
+from account.app.auth.dependencies import get_current_admin, get_current_user, check_admin_manager_or_doctor
 from account.app.auth.hash_password import HashPassword
+from account.app.exceptions import PacientNotExistsException
 from account.app.users.models import User
 from account.app.users.schemas import ShowUserSchema, UserRoles
 from account.app.users.service import UserService
@@ -29,6 +31,15 @@ async def update_account_me(
         hashed_password=HashPassword.get_password_hash(password),
     )
     return updated_current_user
+
+
+@router.get('/{user_id}')
+async def get_pacient_by_id(user_id: int, _: User = Depends(check_admin_manager_or_doctor)) -> ShowUserSchema:
+    user_role_filter = User.roles[0].cast(String).icontains('user')
+    pacient = await UserService.find_one_or_none(user_role_filter, id=user_id)
+    if pacient is None:
+        raise PacientNotExistsException
+    return pacient
 
 
 @router.get('/')

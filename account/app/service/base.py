@@ -18,8 +18,8 @@ class BaseGetService:
         return result.scalars().all()
     
     @classmethod
-    async def find_one_or_none(cls, **filters):
-        query = select(cls.model).filter_by(**filters)
+    async def find_one_or_none(cls, *filters, **kw_filters):
+        query = select(cls.model).filter_by(**kw_filters).filter(*filters)
         result = await cls._get_result(query)
         return result.scalars().one_or_none()
 
