@@ -1,4 +1,3 @@
-from dataclasses import dataclass
 from pydantic import BaseModel
 
 
@@ -9,3 +8,4 @@ REFRESH_TOKEN_TYPE = 'refresh_token'
 class TokenInfo(BaseModel):
     access_token: str
     refresh_token: str
+    token_type: str = 'Bearer'
