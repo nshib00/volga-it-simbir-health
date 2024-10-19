@@ -1,5 +1,6 @@
 import uvicorn
 from fastapi import FastAPI
+from fastapi.openapi.utils import get_openapi
 import sys
 from pathlib import Path
 
@@ -18,6 +19,22 @@ app = FastAPI()
 ALL_ROUTERS = (main_timetable_router, doctor_timetable_router, hospital_timetable_router, appointments_router)
 for router in ALL_ROUTERS:
     app.include_router(router)
+
+
+def custom_openapi():
+    if app.openapi_schema:
+        return app.openapi_schema
+    openapi_schema = get_openapi(
+        title="SimbirHealth | Timetable API",
+        version="1.0.0",
+        summary="Работа с расписанием",
+        description="Документация API микросервиса расписаний SimbirHealth.",
+        routes=app.routes,
+    )
+    app.openapi_schema = openapi_schema
+    return app.openapi_schema
+
+app.openapi = custom_openapi
 
 
 if __name__ == '__main__':
