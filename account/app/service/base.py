@@ -12,8 +12,8 @@ class BaseGetService:
         return result
     
     @classmethod
-    async def find_all(cls, **filters):
-        query = select(cls.model).filter_by(**filters)
+    async def find_all(cls, *filters, **kw_filters):
+        query = select(cls.model).filter_by(**kw_filters).filter(*filters)
         result = await cls._get_result(query)
         return result.scalars().all()
     
