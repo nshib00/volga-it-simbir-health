@@ -1,8 +1,11 @@
 from datetime import datetime, timedelta
 import httpx
 
-from account.app.exceptions import GeneralAPIException
-from timetable.app.exceptions import DoctorNotFoundException, HospitalNotFoundException, TimetableDateToSmallerDateFromException, TimetableInvalidFromDatetimeException, TimetableInvalidToDatetimeException, TooBigDateIntervalException
+from timetable.app.exceptions import GeneralAPIException
+from timetable.app.exceptions import (
+    DoctorNotFoundException, HospitalNotFoundException, TimetableDateToSmallerDateFromException,
+    TimetableInvalidFromDatetimeException, TimetableInvalidToDatetimeException, TooBigDateIntervalException
+)
 from timetable.app.config import settings
 
 

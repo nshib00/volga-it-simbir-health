@@ -9,6 +9,12 @@ class BaseAppException(HTTPException):
         super().__init__(status_code=self.status_code, detail=self.detail)
 
 
+class GeneralAPIException(BaseAppException):
+    def __init__(self, status_code: int, context: str):
+        self.status_code = status_code
+        self.detail = context
+
+
 class BaseUnauthorizedException(BaseAppException):
     status_code = status.HTTP_401_UNAUTHORIZED
 
