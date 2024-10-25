@@ -4,8 +4,8 @@ import httpx
 
 from document.app.accounts import get_account_me
 from document.app.exceptions import (
-    APIExceptionWithContext, DatetimeIsAlreadyTakenException, ForbiddenException, FutureDatetimeException, HistoryInvalidDatetimeException, HospitalNotFoundException, 
-    RoomNotExistException, UserIsNotPacientOrDoctorException
+    APIExceptionWithContext, DatetimeIsAlreadyTakenException, ForbiddenException, FutureDatetimeException, 
+    HistoryInvalidDatetimeException, HospitalNotFoundException, RoomNotExistException, UserIsNotPacientOrDoctorException
 )
 from document.app.config import settings
 from document.app.service import HistoryService
@@ -69,7 +69,7 @@ def check_if_pacient_exists(pacient_id: int, cookies: dict[str, str]) -> None:
     '''
     Проверяет, есть ли в базе данных пациент с id=pacient_id.
     '''
-    url = settings.BASE_ACCOUNTS_URL + f'/{pacient_id}'
+    url = settings.BASE_ACCOUNTS_URL + f'/Pacients/{pacient_id}'
     check_if_object_exists(
         url=url,
         user_cookies=cookies,

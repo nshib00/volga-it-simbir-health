@@ -33,7 +33,13 @@ async def update_account_me(
     return updated_current_user
 
 
-@router.get('/{user_id}')
+@router.get('/Pacients')
+async def get_all_pacients(_: User = Depends(check_admin_manager_or_doctor)) -> list[ShowUserSchema]:
+    user_role_filter = User.roles[0].cast(String).icontains('user')
+    return await UserService.find_all(user_role_filter)
+
+
+@router.get('/Pacients/{user_id}')
 async def get_pacient_by_id(user_id: int, _: User = Depends(check_admin_manager_or_doctor)) -> ShowUserSchema:
     user_role_filter = User.roles[0].cast(String).icontains('user')
     pacient = await UserService.find_one_or_none(user_role_filter, id=user_id)
@@ -55,7 +61,7 @@ async def update_account(
     username: str,
     password: str,
     roles: list[UserRoles],
-    user: User = Depends(get_current_admin)
+    _: User = Depends(get_current_admin)
 ) -> None:
     hashed_password = HashPassword.get_password_hash(password)
     if HashPassword.verify(password, hashed_password):
