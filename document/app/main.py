@@ -1,17 +1,42 @@
+from contextlib import asynccontextmanager
 import uvicorn
 from fastapi import FastAPI
 from fastapi.openapi.utils import get_openapi
 import sys
 from pathlib import Path
+from elasticsearch import AsyncElasticsearch
+
+from document.app.service import HistoryService
+
 
 path = Path(__file__).parent.parent.parent
 sys.path.insert(0, str(path))
 
 from document.app.api import router as document_router
+from document.app.config import settings
+from document.elastic.service import ElasticService
 
 
-app = FastAPI()
+elastic_client = AsyncElasticsearch(
+    hosts=settings.ELASTIC_URL,
+    basic_auth=(settings.ELASTIC_USER, settings.ELASTIC_PASSWORD)
+)
+
+
+@asynccontextmanager
+async def lifespan(app: FastAPI):
+    await ElasticService.create_index_if_not_exists(elastic_client)
+    history_data: list[dict] = await HistoryService.get_history_data_to_sync()
+    # if not history_data:
+    await ElasticService.fill_index(history_data, elastic_client)
+    yield
+    await elastic_client.close()
+
+
+app = FastAPI(lifespan=lifespan)
 app.include_router(document_router)
+app.state.elastic_client = elastic_client
+
 
 def custom_openapi():
     if app.openapi_schema:

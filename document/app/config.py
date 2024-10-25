@@ -11,11 +11,15 @@ class DocumentSettings(BaseSettings):
     DB_USER: str
     DB_PASSWORD: str
 
+    ELASTIC_URL: str
+    ELASTIC_USER: str
+    ELASTIC_PASSWORD: str
+
     BASE_AUTH_URL: str
     BASE_ACCOUNTS_URL: str
     BASE_DOCTORS_URL: str
     BASE_HOSPITAL_URL: str
-
+    
     @property
     def DB_URL(self):
         return f'postgresql+asyncpg://{self.DB_USER}:{self.DB_PASSWORD}@{self.DB_HOST}:{self.DB_PORT}/{self.DB_NAME}'

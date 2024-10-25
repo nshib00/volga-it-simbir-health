@@ -1,0 +1,26 @@
+[tool.poetry]
+name = "volga-it-simbir-health"
+version = "0.1.0"
+description = "Решение задания полуфинала олимпиады Волга-IT 2024, дисциплина \"Backend-разработка: Web API\"."
+authors = ["nshib00 <nshib.54321@gmail.com>"]
+readme = "README.md"
+
+[tool.poetry.dependencies]
+python = "^3.12"
+fastapi = "^0.115.0"
+uvicorn = "^0.30.6"
+asyncpg = "^0.29.0"
+pydantic = "^2.9.2"
+sqlalchemy = "^2.0.35"
+alembic = "^1.13.2"
+python-dotenv = "^1.0.1"
+pydantic-settings = "2.3.1"
+elasticsearch = "^8.15.1"
+aiohttp = "^3.10.10"
+gunicorn = "^23.0.0"
+httpx = "^0.27.2"
+
+
+[build-system]
+requires = ["poetry-core"]
+build-backend = "poetry.core.masonry.api"
