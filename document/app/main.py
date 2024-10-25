@@ -6,15 +6,13 @@ import sys
 from pathlib import Path
 from elasticsearch import AsyncElasticsearch
 
-from document.app.service import HistoryService
-
-
 path = Path(__file__).parent.parent.parent
 sys.path.insert(0, str(path))
 
 from document.app.api import router as document_router
 from document.app.config import settings
 from document.elastic.service import ElasticService
+from document.app.service import HistoryService
 
 
 elastic_client = AsyncElasticsearch(
@@ -27,7 +25,6 @@ elastic_client = AsyncElasticsearch(
 async def lifespan(app: FastAPI):
     await ElasticService.create_index_if_not_exists(elastic_client)
     history_data: list[dict] = await HistoryService.get_history_data_to_sync()
-    # if not history_data:
     await ElasticService.fill_index(history_data, elastic_client)
     yield
     await elastic_client.close()

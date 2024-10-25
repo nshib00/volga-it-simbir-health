@@ -10,6 +10,7 @@ def get_documents_query(
 ) -> dict:
     query_dict = {
         "function_score": {
+            "min_score": 0.1,
             "query": {
                 "bool": {
                     "should": [
@@ -17,7 +18,17 @@ def get_documents_query(
                             "match": {
                                 "date": {"query": history_date}
                             }
-                        }
+                        },
+                        {
+                            "match": {
+                                "data": {
+                                    "query": query,
+                                    "fuzziness": "AUTO:3,5",
+                                    "operator": "and",
+                                    "boost": 3.0
+                                }
+                            }
+                        },
                     ],
                     "must": [
                         {
@@ -29,16 +40,6 @@ def get_documents_query(
                         {
                             "term": {"doctorId": doctor_id}
                         },
-                        {
-                            "match": {
-                                "data": {
-                                    "query": query,
-                                    "fuzziness": "AUTO",
-                                    "operator": "and",
-                                    "boost": 5.0
-                                    }
-                                }
-                        }
                     ]
                 }
             },

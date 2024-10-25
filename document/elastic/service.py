@@ -48,8 +48,11 @@ class ElasticService:
             doctor_id=doctor_id,
             history_date=date
         )
-        search_result = await elastic_client.search(index=cls.index_name, query=documents_query)
-        # TODO: парсинг выдачи elastic, выделение нужных полей 
+        search_result = await elastic_client.search(
+            index=cls.index_name,
+            query=documents_query,
+            filter_path='hits.hits._id,hits.hits._score,hits.hits._source'
+        )
         return search_result
 
 
