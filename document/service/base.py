@@ -1,5 +1,5 @@
-from sqlalchemy import delete, insert, select, update
-from timetable.app.database import async_sessionmaker
+from sqlalchemy import ScalarResult, delete, insert, select, update
+from document.app.database import async_sessionmaker
 
 
 class BaseGetService:
@@ -32,22 +32,28 @@ class BaseAddService:
     model = None
 
     @classmethod
-    async def add(cls, **data):
+    async def add(cls, return_model: bool = False, **data) -> ScalarResult | None:
         query = insert(cls.model).values(**data)
+        if return_model:
+            query = query.returning(cls.model)
         async with async_sessionmaker() as session:
-            await session.execute(query)
+            result = await session.execute(query)
             await session.commit()
+        return result.scalar()
 
     
 class BaseUpdateService:
     model = None
 
     @classmethod
-    async def update_one(cls, model_id: int, **values):
+    async def update_one(cls, model_id: int, return_model: bool = False, **values) -> ScalarResult | None:
         query = update(cls.model).where(cls.model.id == model_id).values(**values)
+        if return_model:
+            query = query.returning(cls.model)
         async with async_sessionmaker() as session:
-            await session.execute(query)
+            result = await session.execute(query)
             await session.commit()
+        return result.scalar()
 
 
 class BaseDeleteService:
