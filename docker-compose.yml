@@ -115,7 +115,3 @@
         - 5601:5601
       depends_on:
         - document_elastic
-
-  networks:
-    es-net:
-      driver: bridge
