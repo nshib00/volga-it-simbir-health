@@ -16,8 +16,8 @@ from document.app.service import HistoryService
 
 
 elastic_client = AsyncElasticsearch(
-    hosts=settings.ELASTIC_URL,
-    basic_auth=(settings.ELASTIC_USER, settings.ELASTIC_PASSWORD)
+    hosts=settings.ELASTIC_URL
+    # basic_auth=(settings.ELASTIC_USER, settings.ELASTIC_PASSWORD)
 )
 
 
