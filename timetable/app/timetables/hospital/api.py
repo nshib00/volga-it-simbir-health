@@ -22,7 +22,7 @@ async def get_hospital_timetable(request: Request, hospitalId: int, from_: datet
 @router.delete('/{hospitalId}', status_code=status.HTTP_204_NO_CONTENT)
 async def delete_hospital_timetable(request: Request, hospitalId: int, _ = Depends(check_admin_or_manager)) -> None:
     await check_if_hospital_exists(hospitalId, request.cookies)
-    await TimetableHospitalService.delete_hospital_timetables(mode_id=hospitalId)
+    await TimetableHospitalService.delete_hospital_timetables(hospital_id=hospitalId)
 
 
 @router.get('/{hospitalId}/Room/{roomId}')

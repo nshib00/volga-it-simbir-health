@@ -116,8 +116,8 @@ class TimetableHospitalService(BaseTimetableService):
         )
 
     @classmethod
-    async def delete_hospital_timetables(cls, doctor_id: int):
-        hospital_timetables_query = select(cls.model.__table__.columns).where(cls.model.doctorId == doctor_id)
+    async def delete_hospital_timetables(cls, hospital_id: int):
+        hospital_timetables_query = select(cls.model.__table__.columns).where(cls.model.hospitalId == hospital_id)
         hospital_timetables_result = await cls._get_result(hospital_timetables_query)
         hospital_timetable_ids = [
             timetable['id'] for timetable in hospital_timetables_result.mappings().all()
