@@ -3,6 +3,7 @@ from sqlalchemy import String
 
 from account.app.auth.dependencies import get_current_admin, get_current_user, check_admin_manager_or_doctor
 from account.app.auth.hash_password import HashPassword
+from account.app.auth.logic import clear_refresh_token
 from account.app.exceptions import PacientNotExistsException
 from account.app.users.models import User
 from account.app.users.schemas import ShowUserSchema, UserRoles
@@ -78,3 +79,4 @@ async def update_account(
 @router.delete('/{user_id}', status_code=status.HTTP_204_NO_CONTENT)
 async def delete_account(user_id: int, user: User = Depends(get_current_admin)) -> None:
     await UserService.delete_one(user_id)
+    await clear_refresh_token(user_id)
