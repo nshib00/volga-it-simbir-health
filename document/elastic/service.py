@@ -22,7 +22,6 @@ class ElasticService:
 
     @classmethod
     async def create_index_if_not_exists(cls, elastic_client: AsyncElasticsearch) -> None:
-        await elastic_client.indices.delete(index=cls.index_name)
         if not (await elastic_client.indices.exists(index=cls.index_name)):
             await elastic_client.indices.create(index=cls.index_name, mappings=ELASTIC_MAPPINGS)
 
