@@ -1,0 +1,121 @@
+  services:
+    account_postgres:
+      image: postgres:16-alpine
+      container_name: account_db
+      env_file:
+        - account/app/.account-prod.env
+      ports:
+        - 5432:5432
+      restart: always
+
+    account:
+      build:
+        context: account/
+      container_name: account_app
+      env_file:
+        - account/app/.account-prod.env
+      command: ["/account/docker/app.sh"]
+      volumes:
+        - ./account:/account
+      ports:
+        - 8081:8081 
+      restart: always
+      depends_on:
+        - account_postgres
+      
+    hospital_postgres:
+      image: postgres:16-alpine
+      container_name: hospital_db
+      env_file:
+        - hospital/.hospital-prod.env
+      ports:
+        - 5433:5432
+      restart: always
+
+    hospital:
+      build:
+        context: hospital/
+      container_name: hospital_app
+      env_file:
+        - hospital/.hospital-prod.env
+      command: ["/hospital/docker/app.sh"]
+      volumes:
+        - ./hospital:/hospital
+      ports:
+        - 8082:8082 
+      restart: always
+      depends_on:
+        - hospital_postgres
+
+    timetable_postgres:
+      image: postgres:16-alpine
+      container_name: timetable_db
+      env_file:
+        - timetable/.timetable-prod.env
+      ports:
+        - 5434:5432
+      restart: always
+    
+    timetable:
+      build:
+        context: timetable/
+      container_name: timetable_app
+      env_file:
+        - timetable/.timetable-prod.env
+      command: ["/timetable/docker/app.sh"]
+      volumes:
+        - ./timetable:/timetable
+      ports:
+        - 8083:8083
+      restart: always
+      depends_on:
+        - timetable_postgres
+
+    document_postgres:
+      image: postgres:16-alpine
+      container_name: document_db
+      env_file:
+        - document/.document-prod.env
+      ports:
+        - 5435:5432
+      restart: always
+
+    document:
+      build:
+        context: document/
+      container_name: document_app
+      env_file:
+        - document/.document-prod.env
+      command: ["/document/docker/app.sh"]
+      volumes:
+        - ./document:/document
+      ports:
+        - 8084:8084
+      restart: always
+      depends_on:
+        - document_postgres
+        - document_elastic
+
+    document_elastic:
+      image: elasticsearch:8.15.3
+      container_name: elasticsearch
+      env_file:
+        - document/.document-prod.env
+      environment: ['CLI_JAVA_OPTS=-Xms512m -Xmx512m','bootstrap.memory_lock=true','discovery.type=single-node','xpack.security.enabled=false', 'xpack.security.enrollment.enabled=false']
+      ports:
+        - 9200:9200 
+        - 9300:9300
+
+    document_kibana:
+      image: kibana:8.15.3
+      container_name: kibana
+      env_file:
+        - document/.document-prod.env
+      ports:
+        - 5601:5601
+      depends_on:
+        - document_elastic
+
+  networks:
+    es-net:
+      driver: bridge

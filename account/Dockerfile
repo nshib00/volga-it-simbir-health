@@ -1,7 +1,8 @@
-FROM python:3.12.5-alpine
+FROM python:3.12.5-slim
 
 RUN mkdir /account
 WORKDIR /account
+RUN mkdir /docker-entrypoint-initdb.d
 
 ENV PYTHONDONTWRITEBYTECODE 1
 ENV PYTHONUNBUFFERED 1
@@ -16,5 +17,4 @@ COPY . .
 
 RUN chmod a+x /account/docker/*.sh
 
-CMD ["gunicorn", "app.main:app", "--workers", "4", "--worker-class", "uvicorn.workers.UvicornWorker", "--bind", "0.0.0.0:8081"]
 

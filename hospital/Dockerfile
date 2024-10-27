@@ -1,4 +1,4 @@
-FROM python:3.12.5-alpine
+FROM python:3.12.5-slim
 
 RUN mkdir /hospital
 WORKDIR /hospital
@@ -14,5 +14,7 @@ RUN poetry install
 
 COPY . .
 
-CMD ["gunicorn", "app.main:app", "--workers", "4", "--worker-class", "uvicorn.workers.UvicornWorker", "--bind", "0.0.0.0:8082"]
+RUN chmod a+x /hospital/docker/*.sh
+
+# CMD ["gunicorn", "app.main:app", "--workers", "4", "--worker-class", "uvicorn.workers.UvicornWorker", "--bind", "0.0.0.0:8082"]
 
