@@ -1,4 +1,4 @@
-account/.account.env
+account/app/.account.env
 hospital/.hospital.env
 timetable/.timetable.env
 document/.document.env
